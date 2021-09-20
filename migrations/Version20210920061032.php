@@ -36,4 +36,9 @@ final class Version20210920061032 extends AbstractMigration
         $this->addSql('DROP TABLE wallet');
         $this->addSql('DROP TABLE wallet_operation');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }
