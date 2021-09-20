@@ -6,6 +6,7 @@ use App\Repository\AccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass=AccountRepository::class)
@@ -14,8 +15,7 @@ class Account
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", unique=true)
      */
     private $id;
 
@@ -31,10 +31,11 @@ class Account
 
     public function __construct()
     {
+        $this->id = Uuid::v4()->toRfc4122();
         $this->wallets = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): string
     {
         return $this->id;
     }

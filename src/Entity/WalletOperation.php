@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\WalletOperationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass=WalletOperationRepository::class)
@@ -12,8 +13,7 @@ class WalletOperation
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="string", unique=true)
      */
     private $id;
 
@@ -33,7 +33,12 @@ class WalletOperation
      */
     private $details = [];
 
-    public function getId(): ?int
+    public function __construct()
+    {
+        $this->id = Uuid::v4()->toRfc4122();
+    }
+
+    public function getId(): string
     {
         return $this->id;
     }
