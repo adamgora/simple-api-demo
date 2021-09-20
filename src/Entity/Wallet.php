@@ -2,35 +2,49 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\WalletRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass=WalletRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ *     itemOperations={
+ *         "get"={"normalization_context"={"groups"="wallet.show"}},
+ *     },
+ *     collectionOperations={
+ *          "post"={"denormalization_context"={"groups"="wallet.store"}},
+ *     }
+ * )
  */
 class Wallet
 {
     /**
      * @ORM\Id
      * @ORM\Column(type="string", unique=true)
+     * @ApiProperty(identifier=true)
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="wallets")
      * @ORM\JoinColumn(nullable=false)
+     * @ApiProperty(writableLink=true)
+     * @Groups({"wallet.store"})
      */
     private $account;
 
     /**
      * @ORM\Column(type="integer")
+     *
+     * @Groups({"wallet.show"})
      */
-    private $balance;
+    private $balance = 0;
 
     /**
      * @ORM\OneToMany(targetEntity=WalletOperation::class, mappedBy="wallet")
