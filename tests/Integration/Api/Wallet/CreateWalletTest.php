@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Tests\Integration\Api\Account;
+namespace App\Tests\Integration\Api\Wallet;
 
 use App\Repository\AccountRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 
-class CreateAccountTest extends WebTestCase
+class CreateWalletTest extends WebTestCase
 {
     private KernelBrowser $client;
 
