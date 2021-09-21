@@ -23,7 +23,9 @@ class CreateWalletTest extends WebTestCase
 
     public function test_it_creates_wallet_for_specified_account(): void
     {
-        $account = $this->accountRepository->findOneBy([]);
+        $account = $this->accountRepository->findOneBy([
+            'name' => 'FOO_ACCOUNT'
+        ]);
         $this->client->jsonRequest('POST', '/api/wallets', [
             'account' => '/api/accounts/' . $account->getId()
         ]);

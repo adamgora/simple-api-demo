@@ -2,12 +2,25 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Validator\Constraints\WalletOperationDetails;
+use App\Validator\Constraints\WalletOperationType;
 use App\Repository\WalletOperationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass=WalletOperationRepository::class)
+ * @ApiResource(
+ *     itemOperations={
+ *          "get"={"normalization_context"={"groups"="wallet_operations.show"}},
+ *     },
+ *     collectionOperations={
+ *          "post"={"denormalization_context"={"groups"="wallet_operation.store"}},
+ *     }
+ * )
  */
 class WalletOperation
 {
@@ -20,16 +33,22 @@ class WalletOperation
     /**
      * @ORM\ManyToOne(targetEntity=Wallet::class, inversedBy="operations")
      * @ORM\JoinColumn(nullable=false)
+     * @ApiProperty(writableLink=true)
+     * @Groups({"wallet_operation.store"})
      */
     private $wallet;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Groups({"wallet_operation.store"})
+     * @WalletOperationType
      */
     private $type;
 
     /**
      * @ORM\Column(type="array")
+     * @Groups({"wallet_operation.store"})
+     * @WalletOperationDetails
      */
     private $details = [];
 
